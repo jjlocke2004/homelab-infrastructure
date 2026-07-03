@@ -150,10 +150,10 @@ This project focuses on developing practical experience with:
 .
 ├── README.md
 ├── docs
-│   ├── media
-│   ├── monitoring
+│   ├── media-platform.md
+│   ├── monitoring-stack.md
 │   ├── security
-│   ├── networking
+│   ├── documentation-platform
 │   └── infrastructure
 ├── diagrams
 ├── images
