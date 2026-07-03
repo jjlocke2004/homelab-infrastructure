@@ -30,7 +30,7 @@ Homepage provides a centralized dashboard for managing and monitoring the homela
 ---
 
 # Architecture Overview
-![Architecture Diagram](images/architecture-diagram.png)
+![Architecture Diagram](diagrams/architecture-diagram.png)
 
 The infrastructure is organized into modular Docker Compose stacks, allowing services to remain independent, easier to maintain, and simple to expand over time.
 
