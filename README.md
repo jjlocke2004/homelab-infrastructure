@@ -153,7 +153,6 @@ This project focuses on developing practical experience with:
 │   ├── media
 │   ├── monitoring
 │   ├── security
-│   ├── documentation
 │   ├── networking
 │   └── infrastructure
 ├── diagrams
