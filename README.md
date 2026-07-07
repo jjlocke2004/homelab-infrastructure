@@ -41,6 +41,7 @@ Current deployments include Media Infrastructure and Monitoring, while Documenta
 # Current Infrastructure
 
 ## Media Infrastructure
+[Media Platform Documentation](docs/media-platform.md)
 
 ### Core Technologies
 
@@ -62,6 +63,7 @@ Current deployments include Media Infrastructure and Monitoring, while Documenta
 ---
 
 ## Monitoring Infrastructure
+[Monitoring Stack Documentation](docs/monitoring-stack.md)
 
 ### Core Technologies
 
@@ -166,10 +168,8 @@ This project focuses on developing practical experience with:
 
 Project documentation is organized into focused guides that describe the deployment, configuration, troubleshooting, and lessons learned throughout the development of the homelab.
 
-Planned documentation includes:
+Future planned documentation includes:
 
-- Media Infrastructure
-- Monitoring Stack
 - Wazuh Deployment
 - CVE Remediation
 - Security Hardening
