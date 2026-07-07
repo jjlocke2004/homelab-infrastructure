@@ -17,7 +17,7 @@ Together, these tools provide both infrastructure monitoring and service availab
 
 # Architecture
 
-![Monitoring Stack Diagram](../images/monitoring-stack-diagram.png)
+![Monitoring Stack Diagram](../diagrams/monitoring-stack-diagram.png)
 
 ---
 
