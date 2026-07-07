@@ -1,4 +1,4 @@
-# Infrastructure & Security Lab
+# Homelab Infrastructure
 
 > A continuously evolving self-hosted infrastructure designed to develop practical experience in Linux administration, Docker, networking, automation, monitoring, and cybersecurity using consumer-grade hardware.
 
