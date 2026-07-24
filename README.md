@@ -78,6 +78,34 @@ Current deployments include media, monitoring, documentation, management, automa
 - Service management
 - Dashboard customization
 - Workflow automation
+---
+
+## Media Stack Addition - Navidrom Music Server
+
+[Navidrome Music Server Documentation](docs/navidrome-music-server.md)
+
+### Core Technologies
+
+- Navidrome
+- Docker Compose
+- Asunder
+- FLAC
+- MusicBrainz Picard
+- Tailscale
+- Linux filesystem permissions
+- SSD-backed storage
+
+### Focus Areas
+
+- Self-hosted music streaming
+- Physical CD digitization
+- Lossless audio preservation
+- Music metadata management
+- Album artwork organization
+- Persistent Docker storage
+- Linux permissions troubleshooting
+- Private remote access
+- Resource-aware service deployment
 
 ---
 
