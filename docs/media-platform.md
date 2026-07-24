@@ -284,7 +284,6 @@ Tailscale provides private access between trusted devices, allowing services on 
 | Access Type          | Description                                                                         |
 | -------------------- | ----------------------------------------------------------------------------------- |
 | Tailscale Access     | Primary method used to access Homepage and other services from trusted devices      |
-| Local Network Access | Services can still be reached locally using the server IP address and service ports |
 | Dashboard Access     | Homepage provides organized links to services using Tailscale-based addresses       |
 | Management Access    | Portainer and SSH are used for server and container administration                  |
 | Automation Access    | n8n workflows can be triggered through webhooks or dashboard buttons                |
@@ -293,7 +292,7 @@ Tailscale provides private access between trusted devices, allowing services on 
 
 Most service links are organized through Homepage and configured to use Tailscale access.
 
-https://tailscale-url:service-port
+https://service-name.tailscale-url
 
 This keeps the platform convenient to access while avoiding unnecessary public exposure.
 
