@@ -17,8 +17,27 @@ The environment is hosted on an **HP Notebook 15-ba009dx (2016)** running **MX L
 | Operating System | MX Linux 25 (Debian-based) |
 | Processor | AMD A6-7310 APU with Radeon R4 Graphics |
 | Memory | 6 GB DDR3 |
-| Storage | 500 GB Seagate HDD |
+| Storage | 500 GB Seagate HDD + External SSD Enclosure 128GB |
 | Container Platform | Docker & Docker Compose |
+| Backups | Encrypted 16GB Sandisk USB |
+
+---
+
+## Security Model
+
+- Services are accessed privately through Tailscale
+- SSH uses key-based authentication
+- UFW denies unsolicited inbound access
+- CrowdSec and Fail2Ban provide automated blocking
+
+---
+
+## Backup and Recovery
+
+- Docker configuration directories are backed up with rsync
+- Backups are stored on encrypted removable media
+- Large replaceable media files are excluded
+- Compose files and configuration data are prioritized
 
 ---
 
@@ -34,7 +53,7 @@ Homepage provides a centralized dashboard for managing and monitoring the homela
 
 The infrastructure is organized into modular Docker Compose stacks, allowing services to remain independent, easier to maintain, and simple to expand over time.
 
-Current deployments include Media Infrastructure and Monitoring, while Documentation and Security capabilities continue to evolve as the lab grows.
+Current deployments include media, monitoring, documentation, management, automation, and security infrastructure organized into independent Docker Compose stacks.
 
 ---
 
@@ -80,9 +99,60 @@ Current deployments include Media Infrastructure and Monitoring, while Documenta
 - System visualization
 - Host performance analysis
 - Docker host monitoring
-
 ---
 
+## Documentation Infrastructure
+
+[Documentation Stack Documentation](docs/documentation-stack.md)
+
+### Core Technologies
+
+- Nextcloud
+- PostgreSQL
+- Redis
+- Apache
+
+### Focus Areas
+
+- Self-hosted file management
+- Basic Markdown and text editing
+- Document organization and synchronization
+- Persistent application storage
+- Database-backed application deployment
+- Private remote access
+- Resource-aware service design
+- Docker stack separation
+  
+---
+
+## Security Infrastructure
+
+[Security Hardening Documentation](docs/security-hardening.md)
+
+### Core Technologies
+
+- Tailscale
+- Tailnet Lock
+- UFW
+- CrowdSec
+- CrowdSec Firewall Bouncer
+- Fail2Ban
+- SSH Key Authentication
+- Mullvad VPN
+- LUKS and rsync
+
+### Focus Areas
+
+- Private remote access
+- Linux host hardening
+- Default-deny firewall configuration
+- SSH access control
+- Automated threat detection and blocking
+- VPN-isolated application traffic
+- Encrypted configuration backups
+- Credential and secret protection
+- Docker service isolation
+- Security validation and recovery planning
 # Current Learning Objectives
 
 This project focuses on developing practical experience with:
@@ -101,48 +171,15 @@ This project focuses on developing practical experience with:
 
 # Project Roadmap
 
-## Documentation Stack
-
-**Planned Technologies**
-
-- Nextcloud
-- Paperless-ngx
-- OnlyOffice
-- PostgreSQL
-- Redis
-- Apache Tika
-- Gotenberg
-
-**Focus Areas**
-
-- Document management
-- OCR workflows
-- Collaboration
-- File synchronization
-- Database administration
-- Self-hosted productivity
-
----
-
-## Security Infrastructure
-
-**Planned Technologies**
-
-- Wazuh SIEM
-- CrowdSec
-- UFW
-- Fail2Ban
-- SSH Key Authentication
-- Tailscale
-
-**Focus Areas**
-
-- Vulnerability management
-- Host hardening
-- Centralized logging
-- Threat detection
-- Secure remote administration
-- Security monitoring
+| Stack | Key services | Status |
+| ------| -------------| -------|
+| Media | Jellyfin, Navidrome | Operational |
+| Monitoring | Grafana, Prometheus, Node Exporter, Uptime Kuma | Operational |
+| Management | Homepage, Portainer, n8n | Operational |
+| Documentation | Nextcloud, PostgreSQL, Redis | Operational |
+| Security and access | Tailscale, UFW, CrowdSec, Fail2Ban, SSH keys | Operational |
+| Document processing | Paperless-ngx | Planned |
+| Office editing | OnlyOffice | Deferred—resource constraints |
 
 ---
 
@@ -159,7 +196,6 @@ This project focuses on developing practical experience with:
 │   └── infrastructure
 ├── diagrams
 ├── images
-└── docker
 ```
 
 ---
@@ -191,14 +227,14 @@ Every addition to the environment is documented, tested, and evaluated before be
 
 ---
 
-# Future Improvements
+## Planned Improvements
 
-- SSD migration
-- Memory upgrade
-- Documentation platform deployment
-- Expanded security monitoring
-- Infrastructure automation
-- Backup improvements
-- Additional service integrations
+- Paperless-ngx document processing
+- Expanded backup and restoration testing
+- Additional infrastructure automation
+- Improved Docker network segmentation
+- Centralized log collection
+- Additional service health monitoring
+- Hardware and memory upgrades
 
 ---
