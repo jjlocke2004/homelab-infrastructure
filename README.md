@@ -191,9 +191,8 @@ This project focuses on developing practical experience with:
 ├── docs
 │   ├── media-platform.md
 │   ├── monitoring-stack.md
-│   ├── security
-│   ├── documentation-platform
-│   └── infrastructure
+│   ├── documentation-stack.md
+│   ├── security-hardening.md
 ├── diagrams
 ├── images
 ```
@@ -208,12 +207,7 @@ Future planned documentation includes:
 
 - Wazuh Deployment
 - CVE Remediation
-- Security Hardening
-- Docker Architecture
-- Documentation Platform
 - Backup Strategy
-- Homepage Customization
-- Networking
 
 ---
 
