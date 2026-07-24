@@ -17,7 +17,7 @@ The environment is hosted on an **HP Notebook 15-ba009dx (2016)** running **MX L
 | Operating System | MX Linux 25 (Debian-based) |
 | Processor | AMD A6-7310 APU with Radeon R4 Graphics |
 | Memory | 6 GB DDR3 |
-| Storage | 500 GB Seagate HDD + External SSD Enclosure 128GB |
+| Storage | 500 GB Seagate HDD + External SSD Samsung M.2 SATA 128GB |
 | Container Platform | Docker & Docker Compose |
 | Backups | Encrypted 16GB Sandisk USB |
 
