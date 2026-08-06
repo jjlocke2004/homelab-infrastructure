@@ -7,7 +7,9 @@
 # Host Platform
 ![Hardware Overview](images/hardware-overview.png)
 
-The environment is hosted on an **HP Notebook 15-ba009dx (2016)** running **Debian Linux Trixie 13**. Rather than relying on enterprise hardware, this project demonstrates that meaningful infrastructure and security experience can be developed using readily available consumer hardware while working within real-world resource constraints.
+The environment is hosted on an **HP Notebook 15-ba009dx (2016)** running **Debian Linux Trixie 13**. 
+
+Rather than relying on enterprise hardware, this project demonstrates that meaningful infrastructure and security experience can be developed using readily available consumer hardware while working within real-world resource constraints.
 
 ## Hardware Specifications
 
