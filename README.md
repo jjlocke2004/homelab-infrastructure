@@ -154,7 +154,6 @@ Current deployments include media, monitoring, documentation, management, automa
 - Nextcloud
 - PostgreSQL
 - Redis
-- Apache
 
 ### Focus Areas
 
