@@ -36,6 +36,8 @@ The server originally ran MX Linux for its user-friendly experience and familiar
 
 As the environment matured, the desktop interface became unnecessary since all management was performed remotely through SSH. The migration reduced system overhead, improved resource efficiency, and transformed the machine into a true headless server environment.
 
+---
+
 ## Security Model
 
 - Services are accessed privately through Tailscale
