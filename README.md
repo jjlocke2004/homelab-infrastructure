@@ -32,7 +32,9 @@ Switched the operating system from MX Linux with a desktop environment to minima
 
 ![ssh-debian-server](images/ssh-debian-server.png)
 
-The server originally ran MX Linux for its user-friendly experience and familiarity while building out the infrastructure and learning Linux administration. As the environment matured, the desktop interface became unnecessary since all management was performed remotely through SSH. The migration reduced system overhead, improved resource efficiency, and transformed the machine into a true headless server environment.
+The server originally ran MX Linux for its user-friendly experience and familiarity while building out the infrastructure and learning Linux administration. 
+
+As the environment matured, the desktop interface became unnecessary since all management was performed remotely through SSH. The migration reduced system overhead, improved resource efficiency, and transformed the machine into a true headless server environment.
 
 ## Security Model
 
