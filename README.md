@@ -7,14 +7,14 @@
 # Host Platform
 ![Hardware Overview](images/hardware-overview.png)
 
-The environment is hosted on an **HP Notebook 15-ba009dx (2016)** running **MX Linux 25 (Debian-based)**. Rather than relying on enterprise hardware, this project demonstrates that meaningful infrastructure and security experience can be developed using readily available consumer hardware while working within real-world resource constraints.
+The environment is hosted on an **HP Notebook 15-ba009dx (2016)** running **Debian Linux Trixie 13**. Rather than relying on enterprise hardware, this project demonstrates that meaningful infrastructure and security experience can be developed using readily available consumer hardware while working within real-world resource constraints.
 
 ## Hardware Specifications
 
 | Component | Specification |
 |-----------|---------------|
 | Host | HP Notebook 15-ba009dx |
-| Operating System | MX Linux 25 (Debian-based) |
+| Operating System | Debian Linux Trixie 13 |
 | Processor | AMD A6-7310 APU with Radeon R4 Graphics |
 | Memory | 6 GB DDR3 |
 | Storage | 500 GB Seagate HDD + External SSD Samsung M.2 SATA 128GB |
@@ -22,6 +22,15 @@ The environment is hosted on an **HP Notebook 15-ba009dx (2016)** running **MX L
 | Backups | Encrypted 16GB Sandisk USB |
 
 ---
+
+## Server Migration (Implemented Aug. 4TH)
+[Server Migration Documentation](/docs/server-migration.md)
+
+Switched the operating system from MX Linux with a desktop environment to minimal command-line only Debian Linux Trixie 13.
+
+![ssh-debian-server](images/ssh-debian-server.png)
+
+The server originally ran MX Linux for its user-friendly experience and familiarity while building out the infrastructure and learning Linux administration. As the environment matured, the desktop interface became unnecessary since all management was performed remotely through SSH. The migration reduced system overhead, improved resource efficiency, and transformed the machine into a true headless server environment.
 
 ## Security Model
 
@@ -66,6 +75,7 @@ Current deployments include media, monitoring, documentation, management, automa
 
 - Jellyfin
 - Homepage
+- Homarr
 - Portainer
 - Vaultwarden
 - n8n
@@ -166,7 +176,6 @@ Current deployments include media, monitoring, documentation, management, automa
 - CrowdSec Firewall Bouncer
 - Fail2Ban
 - SSH Key Authentication
-- Mullvad VPN
 - LUKS and rsync
 
 ### Focus Areas
@@ -181,6 +190,7 @@ Current deployments include media, monitoring, documentation, management, automa
 - Credential and secret protection
 - Docker service isolation
 - Security validation and recovery planning
+
 # Current Learning Objectives
 
 This project focuses on developing practical experience with:
@@ -194,6 +204,7 @@ This project focuses on developing practical experience with:
 - Automation workflows
 - Security hardening
 - Self-hosted services
+- Troubleshooting
 
 ---
 
