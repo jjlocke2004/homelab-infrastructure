@@ -20,6 +20,7 @@ Rather than relying on enterprise hardware, this project demonstrates that meani
 | Processor | AMD A6-7310 APU with Radeon R4 Graphics |
 | Memory | 6 GB DDR3 |
 | Storage | 500 GB Seagate HDD + External SSD Samsung M.2 SATA 128GB |
+| Battery | N/A - Always plugged in |
 | Container Platform | Docker & Docker Compose |
 | Backups | Encrypted 16GB Sandisk USB |
 
