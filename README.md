@@ -92,7 +92,7 @@ Current deployments include media, monitoring, documentation, management, automa
 - Workflow automation
 ---
 
-## Media Stack Addition - Navidrom Music Server
+## Media Stack Addition - Navidrome Music Server
 
 [Navidrome Music Server Documentation](docs/navidrome-music-server.md)
 
