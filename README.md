@@ -28,7 +28,7 @@ Rather than relying on enterprise hardware, this project demonstrates that meani
 ## Server Migration (Implemented Aug. 4TH)
 [Server Migration Documentation](/docs/server-migration.md)
 
-Switched the operating system from MX Linux with a desktop environment to minimal command-line only Debian Linux Trixie 13.
+Switched the operating system from MX Linux with XFCE desktop environment to minimal command-line only Debian Linux Trixie 13.
 
 ![ssh-debian-server](images/ssh-debian-server.png)
 
