@@ -25,7 +25,10 @@ flowchart TD
         P2["Port 2: OpenWRT trunk"]
         P3["Port 3: Media node"]
         P4["Port 4: Monitoring node"]
-        P5["Ports 5-8: End devices"]
+        P5["Port 5: Empty"]
+        P6["Port 6:PS5 (Remote Play)"]
+        P7["Port 7 Access Point"]
+        P8["Port 8 Main Laptop"]
     end
 
     P2 ==>|trunk, all VLANs| R["OpenWRT Router<br/>Lenovo Yoga 3 Pro"]
