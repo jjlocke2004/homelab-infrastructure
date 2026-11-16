@@ -1,279 +1,159 @@
 # Homelab Infrastructure
 
-> A continuously evolving self-hosted infrastructure designed to develop practical experience in Linux administration, Docker, networking, automation, monitoring, and cybersecurity using consumer-grade hardware.
+A self-hosted lab built for hands-on practice with Linux servers, containers, monitoring, and enterprise-style network segmentation. It runs on repurposed laptops and a small managed switch, and is documented here as I build and change it.
+
+**What this lab demonstrates**
+
+- Network segmentation with 802.1Q VLANs and an OpenWRT router-on-a-stick design
+- Containerized services managed with Docker Compose on Debian
+- Monitoring and alerting with Prometheus, Grafana, and Uptime Kuma
+- Secure remote access with Tailscale
+- Troubleshooting and documenting real failures (see [Lessons Learned](#lessons-learned))
 
 ---
 
-# Host Platform
-![Hardware Overview](images/hardware-overview.png)
+## Architecture
 
-The environment is hosted on an **HP Notebook 15-ba009dx (2016)** running **Debian Linux Trixie 13**. 
+```mermaid
+flowchart TD
+    ISP[Verizon Router] -- coax --> EXT[Verizon Wi-Fi Extender]
+    EXT -- WAN VLAN --> SW
 
-Rather than relying on enterprise hardware, this project demonstrates that meaningful infrastructure and security experience can be developed using readily available consumer hardware while working within real-world resource constraints.
+    subgraph SW[TP-Link TL-SG108E - 802.1Q managed switch]
+        P1[Port 1: Extender]
+        P2[Port 2: OpenWRT trunk]
+        P3[Port 3: Media node]
+        P4[Port 4: Monitoring node]
+        P5[Ports 5-8: End devices]
+    end
 
-## Hardware Specifications
+    P2 == trunk, all VLANs ==> R[OpenWRT Router<br/>Lenovo Yoga 3 Pro]
+    P3 --- MEDIA[Media Node<br/>Debian + Docker]
+    P4 --- MON[Monitoring Node<br/>Debian + Docker]
+    P5 --- AP[Access Point<br/>Wi-Fi]
+    AP --- PS5[PS5 / laptops / phones]
+```
 
-| Component | Specification |
-|-----------|---------------|
-| Host | HP Notebook 15-ba009dx |
-| Operating System | Debian Linux Trixie 13 |
-| Processor | AMD A6-7310 APU with Radeon R4 Graphics |
-| Memory | 6 GB DDR3 |
-| Storage | 500 GB Seagate HDD + External SSD Samsung M.2 SATA 128GB |
-| Battery | N/A - Always plugged in |
-| Container Platform | Docker & Docker Compose |
-| Backups | Encrypted 16GB Sandisk USB |
+All inter-VLAN routing, DHCP, and firewalling happen on the OpenWRT router over a single physical trunk link to the switch. The existing home network is untouched: the lab sits behind the router and reaches the internet through the extender.
 
----
-
-## Server Migration (Implemented Aug. 4TH)
-[Server Migration Documentation](/docs/server-migration.md)
-
-Switched the operating system from MX Linux with XFCE desktop environment to minimal command-line only Debian Linux Trixie 13.
-
-![ssh-debian-server](images/ssh-debian-server.png)
-
-The server originally ran MX Linux for its user-friendly experience and familiarity while building out the infrastructure and learning Linux administration. 
-
-As the environment matured, the desktop interface became unnecessary since all management was performed remotely through SSH. The migration reduced system overhead, improved resource efficiency, and transformed the machine into a true headless server environment.
+![Picture of Homelab](images/picofhomelab.jpg)
 
 ---
 
-## Security Model
+## Hardware
 
-- Services are accessed privately through Tailscale
-- SSH uses key-based authentication
-- UFW denies unsolicited inbound access
-- CrowdSec and Fail2Ban provide automated blocking
-
----
-
-## Backup and Recovery
-
-- Docker configuration directories are backed up with rsync
-- Backups are stored on encrypted removable media
-- Large replaceable media files are excluded
-- Compose files and configuration data are prioritized
+| Role | Device | Notes |
+|------|--------|-------|
+| Media node | HP Notebook 15 Laptop (8GB Ram) (2016) | Debian 13 (Trixie), Docker Compose |
+| Monitoring node | HP Pavilion DM4 Laptop (6 GB Ram) (2011) | Debian 13 (Trixie), Docker Compose |
+| Router | Lenovo Yoga 3 Pro (Core M5Y71, 8 GB RAM) | OpenWRT 25.12, booted from a USB 3 drive, USB 3 gigabit Ethernet adapter as the trunk interface |
+| Switch | TP-Link TL-SG108E | 8-port gigabit managed switch, 802.1Q VLANs |
+| Access point | Linksys Wi-Fi Extender (RE6300) | Wi-Fi for end devices |
+| Uplink | Verizon Wi-Fi extender | Wired to the Verizon router over coax; acts as the lab's internet source |
+| Gaming | PlayStation 5 | On the end-devices VLAN, used with Remote Play |
 
 ---
 
-# Homepage Dashboard
-![Homepage Dashboard](images/homepage-dashboard.png)
+## Network
 
-Homepage provides a centralized dashboard for managing and monitoring the homelab. It serves as the primary interface for accessing services, viewing system health, and organizing the infrastructure into logical groups.
+### VLANs
 
----
+| VLAN | Name | Subnet | Members | Policy |
+|------|------|--------|---------|--------|
+| 10 | WAN | n/a | Extender uplink | Untagged to the extender port only |
+| 20 | Servers | 10.0.20.0/24 | Media node, monitoring node | Internet access; cannot reach the router or end devices |
+| 1 | End devices | 10.0.1.0/24 | Laptop, access point clients, PS5 | Internet access; can reach servers as needed |
 
-# Architecture Overview
-![Architecture Diagram](diagrams/architecture-diagram.png)
+### Switch port map (TL-SG108E)
 
-The infrastructure is organized into modular Docker Compose stacks, allowing services to remain independent, easier to maintain, and simple to expand over time.
+| Port | Connected to | VLAN mode |
+|------|--------------|-----------|
+| 1 | Verizon extender | WAN, untagged |
+| 2 | OpenWRT router | 802.1Q trunk (all VLANs tagged) |
+| 3 | Media node | Servers, untagged |
+| 4 | Monitoring node | Servers, untagged |
+| 5 | spare port | End devices, untagged |
+| 6 | PS5 for remote play | End devices, untagged |
+| 7 | Access point (linksys wifi extender) | End devices, untagged | 
+| 8 | Main laptop | End devices, untagged |
 
-Current deployments include media, monitoring, documentation, management, automation, and security infrastructure organized into independent Docker Compose stacks.
+### Router (OpenWRT)
 
----
+- **Design:** router-on-a-stick. One USB 3 gigabit adapter carries every VLAN as tagged sub-interfaces; OpenWRT does inter-VLAN routing and NAT.
+- **Firewall:** separate zones per VLAN. The servers VLAN is isolated from the router and from end devices, with exceptions opened only for troubleshooting.
+- **Throughput:** iperf3 measured about 950 Mbit/s router-to-server and laptop-to-server, so the single-link design is not a bottleneck on gigabit.
+- **Wi-Fi:** provided by a dedicated access point on the end-devices VLAN 
 
-# Current Infrastructure
+### Remote access
 
-## Media Infrastructure
-[Media Platform Documentation](docs/media-platform.md)
-
-### Core Technologies
-
-- Jellyfin
-- Homepage
-- Homarr
-- Portainer
-- Vaultwarden
-- n8n
-
-### Focus Areas
-
-- Docker Compose
-- Container networking
-- Persistent storage
-- Service management
-- Dashboard customization
-- Workflow automation
----
-
-## Media Stack Addition - Navidrome Music Server
-
-[Navidrome Music Server Documentation](docs/navidrome-music-server.md)
-
-### Core Technologies
-
-- Navidrome
-- Docker Compose
-- Asunder
-- FLAC
-- MusicBrainz Picard
-- Tailscale
-- Linux filesystem permissions
-- SSD-backed storage
-
-### Focus Areas
-
-- Self-hosted music streaming
-- Physical CD digitization
-- Lossless audio preservation
-- Music metadata management
-- Album artwork organization
-- Persistent Docker storage
-- Linux permissions troubleshooting
-- Private remote access
-- Resource-aware service deployment
+Tailscale provides access to the servers from outside the network. Services that don't need to be public are reachable only over the tailnet.
 
 ---
 
-## Monitoring Infrastructure
-[Monitoring Stack Documentation](docs/monitoring-stack.md)
+## Servers
 
-### Core Technologies
+### Media node
 
-- Grafana
-- Prometheus
-- Node Exporter
-- Uptime Kuma
+Runs on Debian 13 with Docker Compose. Each stack has its own compose file and an `.env` file for configuration (examples in [`media-node/`](media-node/)).
 
-### Focus Areas
+| Service | Purpose |
+|---------|---------|
+| Jellyfin | Media streaming |
+| Nextcloud (with PostgreSQL and Redis) | File storage and sync, also used to share media files to other devices |
+| Vaultwarden | Self-hosted password manager |
+| n8n | Workflow automation |
+| Homepage | Dashboard linking all services |
+| Tailscale | Remote access |
 
-- Infrastructure monitoring
-- Metrics collection
-- Service availability monitoring
-- System visualization
-- Host performance analysis
-- Docker host monitoring
----
+### Monitoring node
 
-## Documentation Infrastructure
+Runs on Debian 13 with Docker Compose (see [`monitoring-node/`](monitoring-node/)).
 
-[Documentation Stack Documentation](docs/documentation-stack.md)
+| Service | Purpose |
+|---------|---------|
+| Prometheus | Metrics collection |
+| Grafana | Dashboards |
+| Uptime Kuma | Service uptime checks and alerts |
 
-### Core Technologies
-
-- Nextcloud
-- PostgreSQL
-- Redis
-
-### Focus Areas
-
-- Self-hosted file management
-- Basic Markdown and text editing
-- Document organization and synchronization
-- Persistent application storage
-- Database-backed application deployment
-- Private remote access
-- Resource-aware service design
-- Docker stack separation
-  
----
-
-## Security Infrastructure
-
-[Security Hardening Documentation](docs/security-hardening.md)
-
-### Core Technologies
-
-- Tailscale
-- Tailnet Lock
-- UFW
-- CrowdSec
-- CrowdSec Firewall Bouncer
-- Fail2Ban
-- SSH Key Authentication
-- LUKS and rsync
-
-### Focus Areas
-
-- Private remote access
-- Linux host hardening
-- Default-deny firewall configuration
-- SSH access control
-- Automated threat detection and blocking
-- VPN-isolated application traffic
-- Encrypted configuration backups
-- Credential and secret protection
-- Docker service isolation
-- Security validation and recovery planning
-
-# Current Learning Objectives
-
-This project focuses on developing practical experience with:
-
-- Linux system administration
-- Docker and containerized infrastructure
-- Infrastructure monitoring
-- Network administration
-- Secure remote access
-- Infrastructure documentation
-- Automation workflows
-- Security hardening
-- Self-hosted services
-- Troubleshooting
+<!-- TODO: add exporters you actually run (node-exporter, cAdvisor, etc.) and what each scrapes. Add a Grafana screenshot to /images. -->
 
 ---
 
-# Project Roadmap
+## Repository layout
 
-| Stack | Key services | Status |
-| ------| -------------| -------|
-| Media | Jellyfin, Navidrome | Operational |
-| Monitoring | Grafana, Prometheus, Node Exporter, Uptime Kuma | Operational |
-| Management | Homepage, Portainer, n8n | Operational |
-| Documentation | Nextcloud, PostgreSQL, Redis | Operational |
-| Security and access | Tailscale, UFW, CrowdSec, Fail2Ban, SSH keys | Operational |
-| Document processing | Paperless-ngx | Planned |
-| Office editing | OnlyOffice | Deferred—resource constraints |
-
----
-
-# Repository Structure
-
-```text
-.
+```
+homelab-infrastructure/
 ├── README.md
-├── docs
-│   ├── media-platform.md
-│   ├── monitoring-stack.md
-│   ├── documentation-stack.md
-│   ├── security-hardening.md
-├── diagrams
-├── images
+├── docs/
+│   ├── network.md           # VLAN design, addressing, firewall rules
+│   ├── router-openwrt.md    # router-on-a-stick setup walkthrough
+│   └── remote-play.md       # PS5 Remote Play setup
+├── media-node/              # compose files + .env.example
+├── monitoring-node/         # compose files + Prometheus/Grafana config
+├── router/                  # sanitized OpenWRT configs
+├── switch/                  # TL-SG108E VLAN/port settings
+└── images/                  # diagrams and photos
 ```
 
 ---
 
-# Documentation
+## Lessons Learned
 
-Project documentation is organized into focused guides that describe the deployment, configuration, troubleshooting, and lessons learned throughout the development of the homelab.
-
-Future planned documentation includes:
-
-- Wazuh Deployment
-- CVE Remediation
-- Backup Strategy
+- **Config before cable.** Plugging the OpenWRT router into the switch while it still used the Verizon router's default IP caused an address conflict and took down the household network for about 10 minutes. I now verify addressing and DHCP settings on an isolated port before connecting anything to the live network.
+- **USB NICs need care.** The USB 3 Ethernet adapter on the router sometimes negotiates at USB 2 speed until it is fully unplugged and reseated. Verifying link speed with iperf3 after any change catches this.
+- **Containers talk by name, not IP.** Compose networks resolve service names, which avoids breakage when addresses change.
+- **UID mismatches cause permission errors.** Bind-mounted data directories must match the container user's UID/GID.
+- **YAML indentation fails silently** in some configs (Homepage in particular), so I validate before restarting.
 
 ---
 
-# Design Philosophy
+## Security note
 
-This project emphasizes learning through practical implementation rather than enterprise hardware.
-
-By building and maintaining services on an aging consumer laptop, the focus remains on architecture, troubleshooting, documentation, automation, and continuous improvement instead of expensive infrastructure.
-
-Every addition to the environment is documented, tested, and evaluated before becoming part of the long-term platform.
+No secrets are committed to this repository. Compose files use `.env.example` templates with placeholder values, and credentials, API keys, Wi-Fi passphrases, and Tailscale identifiers are excluded.
 
 ---
 
-## Planned Improvements
+## About
 
-- Paperless-ngx document processing
-- Expanded backup and restoration testing
-- Additional infrastructure automation
-- Improved Docker network segmentation
-- Centralized log collection
-- Additional service health monitoring
-- Hardware and memory upgrades
-
----
+Built and maintained by Jonathon Locke
+[LinkedIn](https://linkedin.com/in/jonathon-locke-5a68a0212) · [GitHub](https://github.com/jjlocke2004)
