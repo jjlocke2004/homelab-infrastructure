@@ -18,7 +18,7 @@ A self-hosted lab built for hands-on practice with Linux servers, containers, mo
 ```mermaid
 flowchart TD
     ISP[Verizon Router] -- coax --> EXT[Verizon Wi-Fi Extender]
-    EXT -- WAN VLAN --> SW
+    EXT -- WAN VLAN --> SW --- P1
 
     subgraph SW["TP-Link TL-SG108E - 802.1Q managed switch"]
         P1["Port 1: Extender"]
