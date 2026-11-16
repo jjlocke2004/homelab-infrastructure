@@ -107,10 +107,11 @@ Runs on Debian 13 with Docker Compose. Each stack has its own compose file and a
 | Service | Purpose |
 |---------|---------|
 | Jellyfin | Media streaming |
+| Navidrome | Music streaming |
 | Nextcloud (with PostgreSQL and Redis) | File storage and sync, also used to share media files to other devices |
 | Vaultwarden | Self-hosted password manager |
-| n8n | Workflow automation (not currently running) |
 | Homepage | Dashboard linking all services |
+| Diun | Notifies when container images can be updated |
 | Tailscale | Remote access |
 
 ### Monitoring node
