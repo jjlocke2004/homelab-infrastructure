@@ -5,7 +5,7 @@ A self-hosted lab built for hands-on practice with Linux servers, containers, mo
 **What this lab demonstrates**
 
 - Network segmentation with 802.1Q VLANs and an OpenWRT router-on-a-stick design
-- Containerized services managed with Docker Compose on Debian
+- Containerized services managed with Docker Compose and Podman on Debian
 - Monitoring and alerting with Prometheus, Grafana, and Uptime Kuma
 - Secure remote access with Tailscale
 - Troubleshooting and documenting real failures (see [Lessons Learned](#lessons-learned))
