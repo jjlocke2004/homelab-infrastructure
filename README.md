@@ -12,6 +12,7 @@ A self-hosted lab built for hands-on practice with Linux servers, containers, mo
 
 ---
 
+
 ## Architecture
 
 ```mermaid
@@ -19,20 +20,20 @@ flowchart TD
     ISP[Verizon Router] -- coax --> EXT[Verizon Wi-Fi Extender]
     EXT -- WAN VLAN --> SW
 
-    subgraph SW[TP-Link TL-SG108E - 802.1Q managed switch]
-        P1[Port 1: Extender]
-        P2[Port 2: OpenWRT trunk]
-        P3[Port 3: Media node]
-        P4[Port 4: Monitoring node]
-        P5[Ports 5-8: End devices]
+    subgraph SW["TP-Link TL-SG108E - 802.1Q managed switch"]
+        P1["Port 1: Extender"]
+        P2["Port 2: OpenWRT trunk"]
+        P3["Port 3: Media node"]
+        P4["Port 4: Monitoring node"]
+        P5["Ports 5-8: End devices"]
     end
 
-    P2 == trunk, all VLANs ==> R[OpenWRT Router<br/>Lenovo Yoga 3 Pro]
-    P3 --- MEDIA[Media Node<br/>Debian + Docker]
-    P4 --- MON[Monitoring Node<br/>Debian + Podman]
+    P2 ==>|trunk, all VLANs| R["OpenWRT Router<br/>Lenovo Yoga 3 Pro"]
+    P3 --- MEDIA["Media Node<br/>Debian + Docker"]
+    P4 --- MON["Monitoring Node<br/>Debian + Podman"]
     P5 --- Empty
-    P6 --- PS5 
-    P7 --- AP[Access Point<br/>Wi-Fi]
+    P6 --- PS5
+    P7 --- AP["Access Point<br/>Wi-Fi"]
     P8 --- Laptop
 ```
 
