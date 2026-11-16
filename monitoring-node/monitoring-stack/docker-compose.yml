@@ -1,0 +1,52 @@
+services:
+  uptime-kuma:
+    image: docker.io/louislam/uptime-kuma:2
+    container_name: uptime-kuma
+    volumes:
+     - ${MONITORING_PATH}/configs/uptime-kuma:/app/data
+    ports:
+      - 127.0.0.1:3001:3001
+    restart: unless-stopped
+
+  prometheus:
+    image: docker.io/prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ${MONITORING_PATH}/configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ${MONITORING_PATH}/data/prometheus:/prometheus:U
+    ports:
+      - 127.0.0.1:9090:9090
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+    restart: unless-stopped
+
+  grafana:
+    image: docker.io/grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - TZ=${TZ}
+    volumes:
+      - ${MONITORING_PATH}/configs/grafana:/var/lib/grafana:U
+    ports:
+      - 127.0.0.1:3000:3000
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  node-exporter:
+    image: docker.io/prom/node-exporter:latest
+    container_name: node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - 127.0.0.1:9100:9100
+    restart: unless-stopped
