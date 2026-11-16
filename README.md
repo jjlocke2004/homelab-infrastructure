@@ -103,7 +103,7 @@ Runs on Debian 13 with Docker Compose. Each stack has its own compose file and a
 | Jellyfin | Media streaming |
 | Nextcloud (with PostgreSQL and Redis) | File storage and sync, also used to share media files to other devices |
 | Vaultwarden | Self-hosted password manager |
-| n8n | Workflow automation |
+| n8n | Workflow automation (not currently running) |
 | Homepage | Dashboard linking all services |
 | Tailscale | Remote access |
 
@@ -117,6 +117,7 @@ Runs on Debian 13 with Podman (Podman Compose) (see [`monitoring-node/`](monitor
 | Grafana | Dashboards |
 | Uptime Kuma | Service uptime checks and alerts |
 | Minecraft Server | Run on demand (I don't play as much anymore) |
+| Tailscale | Remote access |
 
 ---
 
