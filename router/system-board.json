@@ -1,0 +1,17 @@
+{
+	"kernel": "6.12.94",
+	"hostname": "OpenWrt",
+	"system": "Intel(R) Core(TM) M-5Y71 CPU @ 1.20GHz",
+	"model": "LENOVO 80HE",
+	"board_name": "lenovo-80he",
+	"rootfs_type": "ext4",
+	"release": {
+		"distribution": "OpenWrt",
+		"version": "25.12.5",
+		"firmware_url": "https://downloads.openwrt.org/",
+		"revision": "r33051-f5dae5ece4",
+		"target": "x86/64",
+		"description": "OpenWrt 25.12.5 r33051-f5dae5ece4",
+		"builddate": "1782737960"
+	}
+}
