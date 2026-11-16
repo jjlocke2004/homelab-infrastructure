@@ -30,8 +30,10 @@ flowchart TD
     P2 == trunk, all VLANs ==> R[OpenWRT Router<br/>Lenovo Yoga 3 Pro]
     P3 --- MEDIA[Media Node<br/>Debian + Docker]
     P4 --- MON[Monitoring Node<br/>Debian + Podman]
-    P5 --- AP[Access Point<br/>Wi-Fi]
-    AP --- PS5[PS5 / laptops / phones]
+    P5 --- Empty
+    P6 --- PS5 
+    P7 --- AP[Access Point<br/>Wi-Fi]
+    P8 --- Main Laptop
 ```
 
 All inter-VLAN routing, DHCP, and firewalling happen on the OpenWRT router over a single physical trunk link to the switch. The existing home network is untouched: the lab sits behind the router and reaches the internet through the extender.
