@@ -5,3 +5,11 @@
 # container data and runtime config
 data/
 config/
+.env*
+!.env.example
+*-compose-env
+configs/
+etc-pihole/
+etc-dnsmasq.d/
+homepage/
+tdarr-cache/
