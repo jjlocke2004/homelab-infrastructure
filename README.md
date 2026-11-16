@@ -29,7 +29,7 @@ flowchart TD
 
     P2 == trunk, all VLANs ==> R[OpenWRT Router<br/>Lenovo Yoga 3 Pro]
     P3 --- MEDIA[Media Node<br/>Debian + Docker]
-    P4 --- MON[Monitoring Node<br/>Debian + Docker]
+    P4 --- MON[Monitoring Node<br/>Debian + Podman]
     P5 --- AP[Access Point<br/>Wi-Fi]
     AP --- PS5[PS5 / laptops / phones]
 ```
@@ -47,7 +47,7 @@ All inter-VLAN routing, DHCP, and firewalling happen on the OpenWRT router over 
 | Role | Device | Notes |
 |------|--------|-------|
 | Media node | HP Notebook 15 Laptop (8GB Ram) (2016) | Debian 13 (Trixie), Docker Compose |
-| Monitoring node | HP Pavilion DM4 Laptop (6 GB Ram) (2011) | Debian 13 (Trixie), Docker Compose |
+| Monitoring node | HP Pavilion DM4 Laptop (6 GB Ram) (2011) | Debian 13 (Trixie), Podman Compose|
 | Router | Lenovo Yoga 3 Pro (Core M5Y71, 8 GB RAM) | OpenWRT 25.12, booted from a USB 3 drive, USB 3 gigabit Ethernet adapter as the trunk interface |
 | Switch | TP-Link TL-SG108E | 8-port gigabit managed switch, 802.1Q VLANs |
 | Access point | Linksys Wi-Fi Extender (RE6300) | Wi-Fi for end devices |
@@ -109,15 +109,14 @@ Runs on Debian 13 with Docker Compose. Each stack has its own compose file and a
 
 ### Monitoring node
 
-Runs on Debian 13 with Docker Compose (see [`monitoring-node/`](monitoring-node/)).
+Runs on Debian 13 with Podman (Podman Compose) (see [`monitoring-node/`](monitoring-node/)).
 
 | Service | Purpose |
 |---------|---------|
 | Prometheus | Metrics collection |
 | Grafana | Dashboards |
 | Uptime Kuma | Service uptime checks and alerts |
-
-<!-- TODO: add exporters you actually run (node-exporter, cAdvisor, etc.) and what each scrapes. Add a Grafana screenshot to /images. -->
+| Minecraft Server | Run on demand (I don't play as much anymore) |
 
 ---
 
