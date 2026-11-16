@@ -36,6 +36,8 @@ flowchart TD
 
 All inter-VLAN routing, DHCP, and firewalling happen on the OpenWRT router over a single physical trunk link to the switch. The existing home network is untouched: the lab sits behind the router and reaches the internet through the extender.
 
+## Picture of Homelab 
+
 ![Picture of Homelab](images/picofhomelab.jpg)
 
 ---
