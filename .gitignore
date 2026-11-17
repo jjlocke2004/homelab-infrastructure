@@ -13,3 +13,5 @@ etc-pihole/
 etc-dnsmasq.d/
 homepage/
 tdarr-cache/
+inventory.yml
+*.retry
