@@ -1,0 +1,10 @@
+all:
+  children:
+    servers:
+      hosts:
+        media-node:
+          ansible_host: 100.64.0.1
+          ansible_user: youruser
+        monitoring-node:
+          ansible_host: 100.64.0.2
+          ansible_user: youruser

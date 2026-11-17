@@ -1,0 +1,6 @@
+- name: Baseline for all servers
+  hosts: servers
+  become: true
+  roles:
+    - baseline
+    - ssh_hardening
