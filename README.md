@@ -11,7 +11,10 @@ A self-hosted lab built for hands-on practice with Linux servers, containers, mo
 - Troubleshooting and documenting real failures (see [Lessons Learned](#lessons-learned))
 
 ---
+## Documentation
+All located in 'docs/' folder for more in depth explanation/showcase of decisions made when building this homelab.
 
+- [docs/router-openwrt.md](docs/router-openwrt.md)
 
 ## Architecture
 
@@ -31,7 +34,7 @@ flowchart TD
         P8["Port 8 Main Laptop"]
     end
 
-    P2 ==>|trunk, all VLANs| R["OpenWRT Router<br/>Lenovo Yoga 3 Pro"]
+    P2 ==>|trunk, VLANs 10 and 20 tagged, end devices untagged| R["OpenWRT Router<br/>Lenovo Yoga 3 Pro"]
     P3 --- MEDIA["Media Node<br/>Debian + Docker"]
     P4 --- MON["Monitoring Node<br/>Debian + Podman"]
     P5 --- Empty
@@ -77,7 +80,7 @@ All inter-VLAN routing, DHCP, and firewalling happen on the OpenWRT router over 
 | Port | Connected to | VLAN mode |
 |------|--------------|-----------|
 | 1 | Verizon extender | WAN, untagged |
-| 2 | OpenWRT router | 802.1Q trunk (all VLANs tagged) |
+| 2 | OpenWRT router | 802.1Q trunk (VLANs 10 and 20 tagged, end devices untagged) |
 | 3 | Media node | Servers, untagged |
 | 4 | Monitoring node | Servers, untagged |
 | 5 | spare port | End devices, untagged |
@@ -87,7 +90,7 @@ All inter-VLAN routing, DHCP, and firewalling happen on the OpenWRT router over 
 
 ### Router (OpenWRT)
 
-- **Design:** router-on-a-stick. One USB 3 gigabit adapter carries every VLAN as tagged sub-interfaces; OpenWRT does inter-VLAN routing and NAT.
+- **Design:** router-on-a-stick. One USB 3 gigabit adapter carries VLANs 10 and 20 tagged, end devices untagged; OpenWRT does inter-VLAN routing and NAT.
 - **Firewall:** separate zones per VLAN. The servers VLAN is isolated from the router and from end devices, with exceptions opened only for troubleshooting.
 - **Throughput:** iperf3 measured about 950 Mbit/s router-to-server and laptop-to-server, so the single-link design is not a bottleneck on gigabit.
 - **Wi-Fi:** provided by a dedicated access point on the end-devices VLAN 
@@ -111,6 +114,8 @@ Runs on Debian 13 with Docker Compose. Each stack has its own compose file and a
 | Nextcloud (with PostgreSQL and Redis) | File storage and sync, also used to share media files to other devices |
 | Vaultwarden | Self-hosted password manager |
 | Homepage | Dashboard linking all services |
+| Portainer | Container management across both nodes |
+| Crowdsec + Friewall Bouncer | Security engine to detect threats and block malicious IPs with a firewall bouncer |
 | Diun | Notifies when container images can be updated |
 | Tailscale | Remote access |
 
@@ -123,26 +128,10 @@ Runs on Debian 13 with Podman (Podman Compose) (see [`monitoring-node/`](monitor
 | Prometheus | Metrics collection |
 | Grafana | Dashboards |
 | Uptime Kuma | Service uptime checks and alerts |
+| Node exporter | Metrics collection of both nodes for Grafana |
+| Crowdsec Firewall Bouncer | Not a container but a systemd service to implement into the crowdsec container on the media node |
 | Minecraft Server | Run on demand (I don't play as much anymore) |
 | Tailscale | Remote access |
-
----
-
-## Repository layout
-
-```
-homelab-infrastructure/
-├── README.md
-├── docs/
-│   ├── network.md           # VLAN design, addressing, firewall rules
-│   ├── router-openwrt.md    # router-on-a-stick setup walkthrough
-│   └── remote-play.md       # PS5 Remote Play setup
-├── media-node/              # compose files + .env.example
-├── monitoring-node/         # compose files + Prometheus/Grafana config
-├── router/                  # sanitized OpenWRT configs
-├── switch/                  # TL-SG108E VLAN/port settings
-└── images/                  # diagrams and photos
-```
 
 ---
 
@@ -165,4 +154,4 @@ No secrets are committed to this repository. Compose files use `.env.example` te
 ## About
 
 Built and maintained by Jonathon Locke
-[LinkedIn](https://linkedin.com/in/jonathon-locke-5a68a0212) · [GitHub](https://github.com/jjlocke2004)
+[LinkedIn](https://linkedin.com/in/jonathon-locke-5a68a0212) · [GitHub](https://github.com/jonlocke0)
